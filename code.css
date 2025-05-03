@@ -1,0 +1,79 @@
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #ff6e7f, #bfe9ff);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Container styling */
+.container {
+    text-align: center;
+    color: #fff;
+    animation: fadeIn 2s ease-in-out;
+}
+
+/* Title Styling */
+.title {
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: slideUp 1.5s forwards;
+    animation-delay: 1s;
+}
+
+/* Subtitle Styling */
+.subtitle {
+    font-size: 20px;
+    opacity: 0;
+    animation: slideUp 1.5s forwards;
+    animation-delay: 1.5s;
+}
+
+/* Button Styling */
+.button {
+    background: #fff;
+    color: #ff6e7f;
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 30px;
+    display: inline-block;
+    opacity: 0;
+    animation: slideUp 1.5s forwards;
+    animation-delay: 2s;
+    transition: all 0.3s ease;
+}
+
+/* Hover Effect for Button */
+.button:hover {
+    background: #ff6e7f;
+    color: #fff;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes slideUp {
+    0% { transform: translateY(50px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+p {
+    text-align: center; 
+}

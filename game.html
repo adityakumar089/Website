@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spin the Wheel Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 15px 0;
+        }
+        .game-container {
+            margin: 20px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .wheel-container {
+            position: relative;
+            margin: 20px auto;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 10px solid #333;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .wheel {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-origin: center;
+        }
+        .wheel div {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            background-color: #FF4500;
+            text-align: center;
+            line-height: 80px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            transform-origin: 100% 100%;
+        }
+        .wheel span {
+            transform: rotate(0deg);
+        }
+        .arrow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(0deg); /* Position at the center of the wheel */
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 20px solid #333;
+        }
+        #restart-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        #restart-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Spin the Wheel Game!</h1>
+    </header>
+
+    <div class="game-container">
+        <div class="wheel-container" id="wheelContainer" onclick="spinWheel()">
+            <div class="wheel" id="wheel">
+                <!-- The slices of the wheel -->
+                <div style="transform: rotate(0deg);"><span><h5>SLAP</h5></span></div>
+                <div style="transform: rotate(72deg);"><span><h5></>HUG</h5></span></div>
+                <div style="transform: rotate(144deg);"><span><h5>give water</h5></span></div>
+                <div style="transform: rotate(216deg);"><span><h5>10rs</h5></span></div>
+                <div style="transform: rotate(288deg);"><span><h5>servent 1min</h5></span></div>
+            </div>
+            <div class="arrow" id="arrow"></div> <!-- Arrow placed at the center of the wheel -->
+        </div>
+        <button id="restart-button" onclick="restartGame()">Restart Game</button>
+    </div>
+
+    <script>
+        let spinInProgress = false;  // Prevent multiple spins while one is in progress
+        let currentDegree = 0; // To track the current rotation of the wheel
+
+        function spinWheel() {
+            if (spinInProgress) return;  // Prevent spinning if already in progress
+            spinInProgress = true;
+
+            const wheel = document.getElementById("wheel");
+            let randomDegree = Math.floor(Math.random() * 360) + 3600;  // Random angle between 3600 and 3960 degrees
+            let targetDegree = currentDegree + randomDegree;  // Final target rotation value
+
+            // Animate the spin using JavaScript
+            animateWheelRotation(wheel, currentDegree, targetDegree);
+
+            // Disable the wheel from being tapped while spinning
+            document.getElementById('wheelContainer').style.pointerEvents = 'none';
+
+            // Update current degree after the spin is complete
+            setTimeout(function() {
+                currentDegree = targetDegree % 360; // Keep the degree within 0-360 range
+                document.getElementById('wheelContainer').style.pointerEvents = 'auto';
+                spinInProgress = false;  // Allow next spin
+            }, 4000);  // Duration of the spin animation
+        }
+
+        function animateWheelRotation(wheel, startDegree, endDegree) {
+            let startTime = performance.now();  // Get current time to start animation
+            const duration = 4000;  // Spin duration in ms (same as setTimeout)
+
+            function rotate() {
+                let currentTime = performance.now();
+                let elapsed = currentTime - startTime;
+                let progress = Math.min(elapsed / duration, 1);  // Progress of the animation (0 to 1)
+
+                // Ease-out animation (starts fast, then slows down)
+                let easedProgress = 1 - Math.pow(1 - progress, 3);  // cubic easing
+
+                let currentRotation = startDegree + (endDegree - startDegree) * easedProgress;
+                wheel.style.transform = `rotate(${currentRotation}deg)`;  // Apply the rotation
+
+                if (progress < 1) {
+                    requestAnimationFrame(rotate);  // Continue animation until 100%
+                }
+            }
+
+            requestAnimationFrame(rotate);  // Start the animation loop
+        }
+
+        // Function to restart the game by resetting the wheel position
+        function restartGame() {
+            const wheel = document.getElementById("wheel");
+            wheel.style.transition = 'none';  // Disable transition for reset
+            wheel.style.transform = 'rotate(0deg)';  // Reset wheel to original position
+            currentDegree = 0;  // Reset current degree
+
+            setTimeout(function() {
+                wheel.style.transition = '';  // Re-enable transition after reset
+            }, 50);
+        }
+    </script>
+
+</body>
+</html>
