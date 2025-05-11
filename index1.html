@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FireTouch Interactive</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #000;
+    }
+    canvas {
+      display: block;
+    }
+   .body {
+      top: 10px;
+      width: 100%;
+      text-align: left;
+      color: red;
+      font-size: 15px;
+      
+    }
+  h3 { color: white;
+    text-align:center;
+  }
+  a { color:yellow;
+  }
+  </style>
+</head>
+<body><h3>Hi, welcome to my web</h3></body>
+<body></body>
+<body>
+  <div class="body">SO, WE KNOW I UPLOAD A HTML CODE OF THIS WEBSITE ON WHATSAPP GROUP WHICH ARE JOIN MY GROUP CLICK ON LINK WHICH PERESNT DOWNSIDE</div>
+  <h2><a href="https://chat.whatsapp.com/Lr7nOIktQeQLY5WckkiAQi">Whatsapp-click me</a></h2>
+
+  <canvas id="fireCanvas"></canvas>
+  <script>
+    const canvas = document.getElementById('fireCanvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const particles = [];
+
+    function createFire(x, y) {
+      for (let i = 0; i < 10; i++) {
+        particles.push({
+          x,
+          y,
+          vx: (Math.random() - 0.5) * 4,
+          vy: Math.random() * -4,
+          life: 100,
+          radius: Math.random() * 5 + 2,
+        });
+      }
+    }
+
+    function draw() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+      ctx.fillRect(0, 0, width, height);
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        ctx.beginPath();
+        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius);
+        gradient.addColorStop(0, 'orange');
+        gradient.addColorStop(1, 'red');
+        ctx.fillStyle = gradient;
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life--;
+        p.radius *= 0.96;
+
+        if (p.life <= 0) particles.splice(i, 1);
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    canvas.addEventListener('mousemove', e => createFire(e.clientX, e.clientY));
+    canvas.addEventListener('touchmove', e => {
+      const touch = e.touches[0];
+      if (touch) createFire(touch.clientX, touch.clientY);
+    });
+
+    draw();
+  </script>
+</body>
+</html>
